@@ -1,4 +1,6 @@
 import java.util.*;
+import java.security.*;
+
 
 public class extractor{
 
@@ -31,7 +33,10 @@ public class extractor{
     }
     
     private boolean clean(){
-        return false;
+        boolean code=false;
+        for(int i=0; i< dirStack.size();i++)
+            code = delete(new File(dirStack.get(i)));
+        return code;
     }
     
     private String extractMSI(String path){
@@ -44,7 +49,12 @@ public class extractor{
         
     }
     
-    private String extractNSIS(String path){
+    private String extractNSIS(String path) throws SecurityException{
+        
+        @unPackDir << unpackdir
+        path = extractEscape(path)
+        s=%x[7z -p1 x -y -o#{unpackdir} "#{path}"]
+        return unpackdir
         return "";
         
     }
@@ -53,6 +63,31 @@ public class extractor{
         return "";
         
     }
+    
+    private boolean mktmp(){
+        byte[] bytesOfMessage = path.getBytes("UTF-8");
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        String thedigest = md.digest(bytesOfMessage).toString();
+        String tmpDir = "/tmp/"+thedigest;
+        
+        File tmp = new File(tmpDir);
+        if(tmp.mkdir()){
+            dirStack.add(tmpDir);
+            return true;
+        }
+        return false;
+    }
+    
+    //http://stackoverflow.com/a/779529
+    private void delete(File f) throws IOException {
+        if (f.isDirectory()) {
+            for (File c : f.listFiles())
+                delete(c);
+        }
+        if (!f.delete())
+            throw new FileNotFoundException("Failed to delete file: " + f);
+    }
+
     
     private Vector<String> match(String text){
         Vector<String> data = new Vector<String>();
