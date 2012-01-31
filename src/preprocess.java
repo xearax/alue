@@ -1,4 +1,16 @@
+import weka.core.Attribute;
+import weka.core.FastVector;
+import weka.core.Instance;
 import weka.core.Instances;
+import weka.filters.unsupervised.attribute.StringToWordVector;
+import weka.core.stemmers.IteratedLovinsStemmer;
+import weka.core.tokenizers.CharacterDelimitedTokenizer;
+import weka.core.tokenizers.Tokenizer;
+import weka.core.tokenizers.WordTokenizer;
+import weka.core.SelectedTag;
+import weka.filters.unsupervised.attribute.Reorder;
+import weka.filters.MultiFilter;
+import weka.filters.Filter;
 
 public class preprocess {
 	private String licens;
