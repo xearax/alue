@@ -2,12 +2,12 @@ import java.io.*;
 import java.util.Vector;
 
 public class logic {
-	private Vector<String> verdict;
+	private Vector<verdict> classificationResult;
 	private File path;
 	
 	public logic( String inPath ) {
 		path = new File( inPath );
-		verdict = new Vector<String>();
+		classificationResult = new Vector<verdict>();
 	}
 
 	public int start() {		
@@ -40,20 +40,22 @@ public class logic {
 			if ( isFileOK( inPath ) ) {				
 				extractor Xtractor = new extractor( inPath.getAbsolutePath() );
 				preprocess pprocess = new preprocess( Xtractor.getLicense() );
-				pprocess.start();
-				classifier cfier = new classifier( pprocess.getInstances() );
-				cfier.start();
 				
-				//Temporarily just adding path to verdict vector
-				verdict.add( inPath.getAbsolutePath() );
-				//verdict.add( cfier.getVerdict() );
+				if ( pprocess.start() != 0 ) {
+					misc.log( "Error: preprocess failed for file: " + inPath.getAbsolutePath() );
+					System.exit( 1 );
+				}
+				
+				classifier cfier = new classifier( "/some/where/classifier.model", pprocess.getInstances() );
+				cfier.start();
+				classificationResult.add( new verdict( inPath.getAbsolutePath(), cfier.getVerdict() ) );
 			}
 		} else {
 			misc.log( "Info: " + inPath.getAbsolutePath() + "is neither file nor directory." );
 		}
 	}
 	
-	public Vector<String> getVerdict() {
-		return verdict;
+	public Vector<verdict> getVerdict() {
+		return classificationResult;
 	}
 }
