@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.Vector;
 
 public class main {
-	private static Vector<String> verdict;
+	private static Vector<verdict> result;
 	
 	public static void main( String args[] ) {
 		
@@ -18,11 +18,11 @@ public class main {
 		
 		logic alue = new logic( args[ 0 ] );
 		alue.start();
-		verdict = alue.getVerdict();
+		result = alue.getVerdict();
 		
-		// Temporarily printing the verdict vector containing all file paths
-		for ( int a=0; a<verdict.size(); a++ )
-			System.out.println( "+ " + verdict.get(a) );
+		// Temporarily printing the verdict vector containing all paths and classification results
+		for ( int a=0; a<result.size(); a++ )
+			System.out.println( "+ " + result.get(a).toString() );
 	}
 	
 	private static int parse( String inArgs[] ) {
@@ -36,7 +36,7 @@ public class main {
 	}
 	
 	private static int dependencies() {
-		String dependencies[] = {"./trid", "./7zip", "./unrtf" };
+		String dependencies[] = {"trid", "7zip", "unrtf" };
 		int result = 0;
 		
 		for ( int count=0; count < dependencies.length; count++ ) {
