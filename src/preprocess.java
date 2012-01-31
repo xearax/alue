@@ -23,7 +23,7 @@ public class preprocess {
 	}
 	
 	private boolean convert() {
-        Instances data = createInstance(licens);
+        Instances data = createInstance();
         if(doFilter(data)){
             return true;
         }
@@ -89,7 +89,7 @@ public class preprocess {
 		return errorCode;
 	}
     
-    private Instances createInstance(String text){
+    private Instances createInstance(){
         // Create data set structure
         FastVector strings = null;
         Attribute contAttr = new Attribute("content",strings);
@@ -102,7 +102,7 @@ public class preprocess {
         //read the content and add the instance data
         Instance f = new Instance(1);
         f.setDataset(dataSet);
-        f.setValue(contAttr, data);
+        f.setValue(contAttr, licens);
         dataSet.add(f);
         
         return dataSet;
