@@ -16,10 +16,6 @@ public class preprocess {
 	private String licens;
 	private Instances instances;
 	
-	public preprocess() {
-		
-	}
-	
 	public preprocess( String text ) {
 		licens = text;
 	}
