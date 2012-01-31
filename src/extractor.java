@@ -42,11 +42,19 @@ public class extractor{
         int returnCode = -1;
         String type = "";
         try{
-            type=kommand("./trid -d:TrIDDefs.TRD -r:10 \""+mPath+"\" | grep \"% (.*)\" | head -n 1 | awk -F\" \" '{ for (j=2;j<NF; j++) printf(\"%s \",$j); print \" \"}'").toLowerCase();
+            type=kommand("./trid -d:TrIDDefs.TRD -r:10 \""+mPath+"\"");
+            for(String n : type.split("\n")){
+                if(n.matches("% (.*)")){
+                    type = n.toLowerCase();
+                    break;
+                }
+            }
         }catch(Exception e){
             
         }
-        if(type.contains("inno")){
+        if(mPath.substring(mPath.lastIndexOf(".")).equalsIgnoreCase(".msi") || mPath.substring(mPath.lastIndexOf(".")).equalsIgnoreCase(".mst"))
+            returnCode = 2;
+        else if(type.contains("inno")){
             returnCode = 1;
         }else if(type.contains("msi") || type.contains("wise") || type.contains("vise")){
             returnCode = 2;
@@ -145,9 +153,9 @@ public class extractor{
             line = readFile(tmpDir+"/!_StringData");
 
             Vector<String> s = match(line);
-            for(int i = 0; i<s.size(); i++){
-                if(s.get(i).contains("\rtf"))
-                    line = s.get(i);
+            for(String str : s){
+                if(str.contains("\rtf"))
+                    line = str;
             }
         }
         
