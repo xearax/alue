@@ -109,7 +109,7 @@ public class preprocess {
         FastVector attInfo = new FastVector();
         attInfo.addElement(contAttr);
         
-        Instances dataSet = new Instances(attInfo,1);
+        Instances dataSet = new Instances("Testdata",attInfo,1);
         
         //read the content and add the instance data
         Instance f = new Instance(1);
