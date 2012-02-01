@@ -1,5 +1,6 @@
 import weka.classifiers.Classifier;
 import weka.core.Instances;
+import weka.core.SerializationHelper;
 
 public class classifier {
 	private Classifier cfier;
