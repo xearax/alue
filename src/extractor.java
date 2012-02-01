@@ -81,9 +81,8 @@ public class extractor{
             }
         }
         
-        
-        if(mktmp(mPath)){
-            String tmpDir = dirStack.lastElement();
+        String tmpDir = mktmp(mPath);
+        if(!tmpDir.equalsIgnoreCase("false")){
             mPath = escape(mPath);
             int error = 0;
             int type = getType(path);
@@ -203,7 +202,7 @@ public class extractor{
     
             
             
-    private boolean mktmp(String mPath){
+    private String mktmp(String mPath){
         try{
             byte[] bytesOfMessage = mPath.getBytes("UTF-8");
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -212,14 +211,14 @@ public class extractor{
             
             File tmp = new File(tmpDir);
             if(tmp.mkdir()){
-                dirStack.add(tmpDir);
-                return true;
+                dirStack.addElement(tmpDir);
+                return tmpDir;
             }
         }catch(Exception e){
             misc.log("Error: mktmp(); "+e.toString());
-            return false;
+            return "false";
         }
-        return true;
+        return "false";
     }
     
     //http://stackoverflow.com/a/779529
