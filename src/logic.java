@@ -41,6 +41,11 @@ public class logic {
 		} else if ( inPath.isFile() ) {
 			if ( isFileOK( inPath ) ) {				
 				extractor Xtractor = new extractor( inPath.getAbsolutePath() );
+				if ( Xtractor.start() != 0 ) {
+					misc.log( "Error: extractor failure." );
+					System.exit( 1 );
+				}
+					
 				preprocess pprocess = new preprocess( Xtractor.getLicense() );
 				Xtractor.clean();
                     
