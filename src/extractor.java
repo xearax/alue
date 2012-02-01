@@ -52,7 +52,7 @@ public class extractor{
                 }
             }
         }catch(Exception e){
-            
+            misc.log("Error: getType(); "+e.toString());
         }
         if(mPath.substring(mPath.lastIndexOf(".")).equalsIgnoreCase(".msi") || mPath.substring(mPath.lastIndexOf(".")).equalsIgnoreCase(".mst"))
             returnCode = 2;
@@ -95,7 +95,7 @@ public class extractor{
                         error = 23;
                     break;
                 case 2:
-                    license+=extractMSI(mPath, tmpDir);
+                    error = extractMSI(mPath, tmpDir);
                     break;
                 case 3:
                     if(extractInno(mPath, tmpDir))
@@ -109,6 +109,7 @@ public class extractor{
             return error;
             
         }else{
+            misc.log("Error: extract(); ");
             //throw new SecurityException("Failed to create temp directory for: "+path);
             return 21;
         }
@@ -129,17 +130,18 @@ public class extractor{
             return line;
         }
         catch(IOException e1) {
+            misc.log("Error: kommand(); "+e1.toString());
             throw new InterruptedException("Failed to run command: "+e1);
         } 
     }
     
-    private boolean clean(){
+    public boolean clean(){
         boolean code=false;
         for(int i=0; i< dirStack.size();i++){
             try{
                 delete(new File(dirStack.get(i)));
                 
-            }catch(Exception e){}
+            }catch(Exception e){misc.log("Error: clean(); "+e.toString());}
         }
         return code;
     }
@@ -152,16 +154,17 @@ public class extractor{
                 line +=str;
             }
             in.close();
-        }catch(Exception e){}
+        }catch(Exception e){misc.log("Error: readFile(); "+e.toString());}
         return line;
     }
     
-    private String extractMSI(String mPath, String tmpDir){
+    private int extractMSI(String mPath, String tmpDir){
+        int errorCode = 1;
         String line ="";
         try{
             kommand("7z x -y -o"+tmpDir+" "+mPath);
         }catch(Exception e){
-            return line;
+            misc.log("Error: extractMSI(); "+e.toString());
         }
         if(new File(tmpDir+"/!_StringData").exists()){
             line = readFile(tmpDir+"/!_StringData");
@@ -172,8 +175,12 @@ public class extractor{
                     line += deRTF(str);
             }
         }
+        if(line.length()>2){
+            license = line;
+            errorCode = 0;
+        }
         
-        return line;
+        return errorCode;
         
     }
     
@@ -183,14 +190,14 @@ public class extractor{
     }
     
     private boolean extractNSIS(String mPath, String tmpDir){
-        boolean s = false;
+        boolean errorCode = false;
         try{
             kommand("7z -p1 x -y -o"+tmpDir+" \""+path+"\"");
-            s = true;
+            errorCode = true;
         }catch(Exception e){
-            
+            misc.log("Error: extractNSIS(); "+e.toString());
         }
-        return s;
+        return errorCode;
         
     }
     
@@ -209,6 +216,7 @@ public class extractor{
                 return true;
             }
         }catch(Exception e){
+            misc.log("Error: mktmp(); "+e.toString());
             return false;
         }
         return true;
