@@ -1,6 +1,8 @@
 import java.util.*;
 import java.security.*;
 import java.io.*;
+import javax.swing.text.rtf.RTFEditorKit;
+import javax.swing.text.*;
 
 
 public class extractor{
@@ -68,6 +70,18 @@ public class extractor{
     private int extract(String mPath){
         if(!codes.contains(mPath.substring(mPath.length()-5)))
             return 23;
+    
+        if(mPath.contains("license") || mPath.contains("eula")){
+            if(mPath.contains(".txt")){
+                license = readFile(mPath);
+                return 0;
+            }else if(mPath.contains(".rtf")){
+                license = deRTF(readFile(mPath));
+                return 0;
+            }
+        }
+        
+        
         if(mktmp(mPath)){
             String tmpDir = dirStack.lastElement();
             mPath = escape(mPath);
@@ -155,7 +169,7 @@ public class extractor{
             Vector<String> s = match(line);
             for(String str : s){
                 if(str.contains("\rtf"))
-                    line = str;
+                    line += deRTF(str);
             }
         }
         
@@ -210,6 +224,19 @@ public class extractor{
             throw new FileNotFoundException("Failed to delete file: " + f);
     }
 
+    private String deRTF(String mPath){
+        String mText = "";
+        try{
+            RTFEditorKit rtfParser = new RTFEditorKit();
+            Document document = rtfParser.createDefaultDocument();
+            rtfParser.read(new StringReader(mPath), document, 0);
+            mText = document.getText(0, document.getLength());
+        }catch(Exception e){
+            misc.log("Error: deRTF; "+e.toString());
+            System.exit(1);
+        }
+        return mText;
+    }
     
     private Vector<String> match(String text){
         Vector<String> data = new Vector<String>();
