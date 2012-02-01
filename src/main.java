@@ -3,6 +3,7 @@ import java.util.Vector;
 
 public class main {
 	private static Vector<verdict> result;
+	private static String modelPath = "";
 	
 	public static void main( String args[] ) {
 		
@@ -16,7 +17,7 @@ public class main {
 			System.exit( 2 );
 		}
 		
-		logic alue = new logic( args[ 0 ] );
+		logic alue = new logic( args[ 0 ], modelPath );
 		alue.start();
 		result = alue.getVerdict();
 		
@@ -29,14 +30,19 @@ public class main {
 		if ( inArgs.length > 0 )
 			if ( inArgs[ 0 ].length() > 0 )
 				return 0;
+			else if ( inArgs.length > 2 ) {
+				if ( inArgs[ 1 ].equalsIgnoreCase( "-c" ) ) {
+					modelPath = inArgs[ 2 ];
+				}
+			}
 		
-		System.err.println( "Usage: ./alue <path-to-eula-file-or-directory>" );
+		System.err.println( "Usage: ./alue <path-to-eula-file-or-directory> [-c <path-to-model-file>]" );
 		
 		return 1;
 	}
 	
 	private static int dependencies() {
-		String dependencies[] = {"trid", "7zip", "unrtf" };
+		String dependencies[] = {"trid", "7z" };
 		int result = 0;
 		
 		for ( int count=0; count < dependencies.length; count++ ) {
