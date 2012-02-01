@@ -41,8 +41,7 @@ public class logic {
 		} else if ( inPath.isFile() ) {
 			if ( isFileOK( inPath ) ) {				
 				extractor Xtractor = new extractor( inPath.getAbsolutePath() );
-				String tmp = Xtractor.getLicense();
-				preprocess pprocess = new preprocess( tmp );
+				preprocess pprocess = new preprocess( Xtractor.getLicense(); );
 				
 				if ( pprocess.start() != 0 ) {
 					misc.log( "Error: preprocess failed for file: " + inPath.getAbsolutePath() );
