@@ -4,7 +4,7 @@ import weka.core.Instance;
 import weka.core.Instances;
 import weka.filters.unsupervised.attribute.StringToWordVector;
 import weka.core.stemmers.IteratedLovinsStemmer;
-import weka.core.stemmers.Stemmer;
+import weka.core.stemmers.*;
 import weka.core.tokenizers.CharacterDelimitedTokenizer;
 import weka.core.tokenizers.Tokenizer;
 import weka.core.tokenizers.WordTokenizer;
@@ -22,6 +22,12 @@ public class preprocess {
 	}
 	
 	public int start() {
+		if ( licens.length() < 2 ){
+			misc.log( "Error: empty license. " );
+			return 1;
+		}
+			
+			
         if(convert())
             return 0;
 		return 1;
