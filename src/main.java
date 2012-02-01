@@ -42,7 +42,7 @@ public class main {
 	}
 	
 	private static int dependencies() {
-		String dependencies[] = {"trid", "7zip", "unrtf" };
+		String dependencies[] = {"trid", "7z" };
 		int result = 0;
 		
 		for ( int count=0; count < dependencies.length; count++ ) {
