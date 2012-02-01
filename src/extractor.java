@@ -68,7 +68,7 @@ public class extractor{
     }
     
     private int extract(String mPath){
-        if(!codes.contains(mPath.substring(mPath.length()-5)))
+        if(!codes.contains(mPath.substring(mPath.length()-4)))
             return 23;
     
         if(mPath.contains("license") || mPath.contains("eula")){
