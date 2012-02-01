@@ -13,6 +13,9 @@ import weka.filters.unsupervised.attribute.Reorder;
 import weka.filters.MultiFilter;
 import weka.filters.Filter;
 
+import weka.core.converters.ArffSaver;
+import java.io.*;
+
 public class preprocess {
 	private String licens;
 	private Instances instances;
@@ -98,25 +101,49 @@ public class preprocess {
                 filSet.add((Instance)filtered.elementAt(i));
             }
 	        instances = filSet;
+            saveArff(instances);
             errorCode = true;
 		}catch(Exception e){
+            misc.log("Error: doFilter(); "+e.toString());
 		}
 		return errorCode;
 	}
     
+    private int saveArff(Instances theCollection){
+		try{
+			// Save data set as Strings
+			ArffSaver saver = new ArffSaver();
+            saver.setInstances(theCollection);
+	        saver.setFile(new File("test.arff"));
+	        saver.writeBatch();
+		}catch(Exception e){
+			System.err.println(e.toString());
+			return 1;
+			
+		}
+		return 0;
+	}
+    
     private Instances createInstance(){
         // Create data set structure
+        FastVector classes = new FastVector(2);
+        classes.addElement("spyware");
+        classes.addElement("legit");
+        Attribute classAttr = new Attribute("category",classes);
         FastVector strings = null;
         Attribute contAttr = new Attribute("content",strings);
         
         FastVector attInfo = new FastVector();
+        attInfo.addElement(classAttr);
         attInfo.addElement(contAttr);
         
         Instances dataSet = new Instances("Testdata",attInfo,1);
+        dataSet.setClassIndex(0);
         
         //read the content and add the instance data
-        Instance f = new Instance(1);
+        Instance f = new Instance(2);
         f.setDataset(dataSet);
+        //f.setClassValue("Spyware");
         f.setValue(contAttr, licens);
         dataSet.add(f);
         

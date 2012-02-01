@@ -56,7 +56,7 @@ public class logic {
 				
 				classifier cfier = new classifier( modelPath, pprocess.getInstances() );
 				cfier.start();
-				classificationResult.add( new verdict( inPath.getAbsolutePath(), cfier.getVerdict() ) );
+				classificationResult.add( new verdict( inPath.getAbsolutePath(), cfier.getVerdict(),  cfier.getVerdictClass()) );
 			}
 		} else {
 			misc.log( "Info: " + inPath.getAbsolutePath() + "is neither file nor directory." );

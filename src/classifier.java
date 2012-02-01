@@ -22,11 +22,11 @@ public class classifier {
 	
 	public int start() {
 		int ret = 0;
-		
+        instances.setClassIndex(instances.numAttributes() - 1);
 		try {
-			verdict = cfier.classifyInstance( instances.firstInstance() );
+            verdict = cfier.classifyInstance( instances.firstInstance() );
 		} catch (Exception e) {
-			misc.log( "Error: while classifying." );
+			misc.log( "Error: while classifying."+e.toString() );
 			ret = 1;
 		}
 		
@@ -36,5 +36,9 @@ public class classifier {
 	public String getVerdict() {
 		return Double.toString( verdict );
 	}
+    
+    public String getVerdictClass(){
+        return instances.classAttribute().value((int) verdict);
+    }
 	
 }

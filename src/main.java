@@ -3,7 +3,7 @@ import java.util.Vector;
 
 public class main {
 	private static Vector<verdict> result;
-	private static String modelPath = "";
+	private static String modelPath = "rf.model";
 	
 	public static void main( String args[] ) {
 		
@@ -16,7 +16,7 @@ public class main {
 			System.err.println( "Exiting." );
 			System.exit( 2 );
 		}
-		
+        
 		logic alue = new logic( args[ 0 ], modelPath );
 		alue.start();
 		result = alue.getVerdict();

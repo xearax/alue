@@ -3,6 +3,8 @@ import java.security.*;
 import java.io.*;
 import javax.swing.text.rtf.RTFEditorKit;
 import javax.swing.text.*;
+import java.util.UUID;
+
 
 
 public class extractor{
@@ -46,7 +48,8 @@ public class extractor{
         try{
             type=kommand("./trid -d:TrIDDefs.TRD -r:10 \""+mPath+"\"");
             for(String n : type.split("\n")){
-                if(n.matches("% (.*)")){
+                if(n.contains("% (.")){
+                    //System.out.println(n); //Uncomment to output the type of a file.
                     type = n.toLowerCase();
                     break;
                 }
@@ -58,7 +61,7 @@ public class extractor{
             returnCode = 2;
         else if(type.contains("inno")){
             returnCode = 1;
-        }else if(type.contains("msi") || type.contains("wise") || type.contains("vise")){
+        }else if(type.contains("msi") || type.contains("wise") || type.contains("vise") || type.contains("mst")){
             returnCode = 2;
         }else if(type.contains("nsis")){
             returnCode = 3;
@@ -116,6 +119,7 @@ public class extractor{
     }
     
     private String kommand(String cmd) throws InterruptedException{
+        String data = "";
         try{
             Process p=Runtime.getRuntime().exec(cmd); 
             p.waitFor(); 
@@ -123,10 +127,11 @@ public class extractor{
             String line=reader.readLine(); 
             while(line!=null) 
             { 
-                System.out.println(line); 
+                //System.out.println(line);
+                data += line+"\n";
                 line=reader.readLine(); 
             } 
-            return line;
+            return data;
         }
         catch(IOException e1) {
             misc.log("Error: kommand(); "+e1.toString());
@@ -161,7 +166,7 @@ public class extractor{
         int errorCode = 1;
         String line ="";
         try{
-            kommand("7z x -y -o"+tmpDir+" "+mPath);
+            kommand("7z x -y -o"+tmpDir+" "+mPath+"");
         }catch(Exception e){
             misc.log("Error: extractMSI(); "+e.toString());
         }
@@ -191,7 +196,7 @@ public class extractor{
     private boolean extractNSIS(String mPath, String tmpDir){
         boolean errorCode = false;
         try{
-            kommand("7z -p1 x -y -o"+tmpDir+" \""+path+"\"");
+            kommand("7z -p1 x -y -o"+tmpDir+" \""+path+"\" > /dev/null");
             errorCode = true;
         }catch(Exception e){
             misc.log("Error: extractNSIS(); "+e.toString());
@@ -204,10 +209,8 @@ public class extractor{
             
     private String mktmp(String mPath){
         try{
-            byte[] bytesOfMessage = mPath.getBytes("UTF-8");
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            String thedigest = md.digest(bytesOfMessage).toString();
-            String tmpDir = "/tmp/"+thedigest;
+            String uuid = UUID.randomUUID().toString();
+            String tmpDir = "/tmp/"+uuid;
             
             File tmp = new File(tmpDir);
             if(tmp.mkdir()){
