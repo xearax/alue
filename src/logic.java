@@ -4,10 +4,12 @@ import java.util.Vector;
 public class logic {
 	private Vector<verdict> classificationResult;
 	private File path;
+	private String modelPath;
 	
-	public logic( String inPath ) {
+	public logic( String inPath, String inModelPath ) {
 		path = new File( inPath );
 		classificationResult = new Vector<verdict>();
+		modelPath = inModelPath;
 	}
 
 	public int start() {		
@@ -39,14 +41,15 @@ public class logic {
 		} else if ( inPath.isFile() ) {
 			if ( isFileOK( inPath ) ) {				
 				extractor Xtractor = new extractor( inPath.getAbsolutePath() );
-				preprocess pprocess = new preprocess( Xtractor.getLicense() );
+				String tmp = Xtractor.getLicense();
+				preprocess pprocess = new preprocess( tmp );
 				
 				if ( pprocess.start() != 0 ) {
 					misc.log( "Error: preprocess failed for file: " + inPath.getAbsolutePath() );
 					System.exit( 1 );
 				}
 				
-				classifier cfier = new classifier( "/some/where/classifier.model", pprocess.getInstances() );
+				classifier cfier = new classifier( modelPath, pprocess.getInstances() );
 				cfier.start();
 				classificationResult.add( new verdict( inPath.getAbsolutePath(), cfier.getVerdict() ) );
 			}
