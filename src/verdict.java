@@ -14,4 +14,8 @@ public class verdict {
 	public String getResult() {
 		return result;
 	}
+	
+	public String toString() {
+		return "Result: " + result + " for '" + name + "'.";
+	}
 }
