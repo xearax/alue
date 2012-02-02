@@ -156,15 +156,26 @@ public class extractor{
             BufferedReader in = new BufferedReader(new FileReader(mPath));
             while ((str = in.readLine()) != null) {
                 line +=str;
+                line +="\n";
             }
             in.close();
         }catch(Exception e){misc.log("Error: readFile(); "+e.toString());}
         return line;
     }
     
+    private void saveFile(String mPath, String data){
+        try{
+            BufferedWriter out = new BufferedWriter(new FileWriter(mPath));
+            out.write(data);
+            out.close();
+        }catch(Exception e){
+            misc.log("Couldn't save File: "+mPath);
+        }
+    }
+    
     private int extractMSI(String mPath, String tmpDir){
-        int errorCode = 1;
-        String line ="";
+        int errorCode = 31;
+        String line ="", tmp = "";;
         try{
             kommand("7z x -y -o"+tmpDir+" "+mPath+"");
         }catch(Exception e){
@@ -172,15 +183,15 @@ public class extractor{
         }
         if(new File(tmpDir+"/!_StringData").exists()){
             line = readFile(tmpDir+"/!_StringData");
-
-            Vector<String> s = match(line);
+            
+            Vector<String> s = match(line); 
             for(String str : s){
-                if(str.contains("\rtf"))
-                    line += deRTF(str);
+                if(str.toLowerCase().contains("rtf".subSequence(0, 2))) //misc.log("Found..");
+                    tmp += deRTF(str);
             }
         }
-        if(line.length()>2){
-            license = line;
+        if(tmp.length()>2){
+            license = tmp;
             errorCode = 0;
         }
         
@@ -234,13 +245,14 @@ public class extractor{
             throw new FileNotFoundException("Failed to delete file: " + f);
     }
 
-    private String deRTF(String mPath){
+    private String deRTF(String text){
         String mText = "";
         try{
-            RTFEditorKit rtfParser = new RTFEditorKit();
-            Document document = rtfParser.createDefaultDocument();
-            rtfParser.read(new StringReader(mPath), document, 0);
-            mText = document.getText(0, document.getLength());
+            saveFile(".tmp", text);
+            mText = kommand("unrtf --text --nopict .tmp");
+            mText = mText.substring(mText.indexOf("-----------------\n")+17);
+            //misc.log(mText);
+            delete(new File(".tmp"));
         }catch(Exception e){
             misc.log("Error: deRTF; "+e.toString());
             System.exit(1);
@@ -254,13 +266,15 @@ public class extractor{
         int count = 0;
         for(int i=0; i<text.length(); i++){
             if(text.charAt(i) == '{'){
-                start = (start != -1)?i:start;
+                if(start == -1){
+                    start = i;
+                }
                 count++;
             }else if(text.charAt(i) == '}'){
                 count--;
             }
-            if((start > -1) && (count == 0)){
-                data.add(text.substring(start+1, i-1));
+            if((start != -1) && (count == 0)){
+                data.add(text.substring(start, i));
                 start = -1;
             }
         }

@@ -41,8 +41,9 @@ public class logic {
 		} else if ( inPath.isFile() ) {
 			if ( isFileOK( inPath ) ) {				
 				extractor Xtractor = new extractor( inPath.getAbsolutePath() );
-				if ( Xtractor.start() != 0 ) {
-					misc.log( "Error: extractor failure." );
+                int rtn = Xtractor.start();
+				if ( rtn != 0 ) {
+					misc.log( "Error: extractor failure. " + rtn);
 					System.exit( 1 );
 				}
 					
