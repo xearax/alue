@@ -46,11 +46,7 @@ public class preprocess {
             arffMap mapper = new arffMap();
             if(mapper.loadStructure() == 0){
                 if(mapper.map(instances) == 0){
-                    try{
-                        saveArff(mapper.getFinal(), "mapped.arff");
-                    }catch(Exception e){
-                        misc.log("MIsch");
-                    }
+                        instances = mapper.getFinal();
                 }
             }
                 
