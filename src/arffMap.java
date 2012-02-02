@@ -12,15 +12,20 @@ import weka.filters.unsupervised.instance.NonSparseToSparse;
 public class arffMap{
     
     Instances defaultSet, finalSet;
+     String structure = "arffMap.arff";
     
     public arffMap(){}
+    
+    public arffMap(String mStructure){
+        structure = mStructure;
+    }
 
     public int loadStructure(){
 		int errorCode = 1;
-        String filename = "arffMap.arff";
+        structure = mStructure;
 		try
         {
-            FileReader reader = new FileReader(filename);
+            FileReader reader = new FileReader(structure);
             ArffReader arff = new ArffReader(reader);
             Instances instances = arff.getStructure();
             instances.setClassIndex(instances.numAttributes() - 1);

@@ -42,7 +42,8 @@ public class logic {
 			if ( isFileOK( inPath ) ) {
                 String license;
                 extractor Xtractor = new extractor( inPath.getAbsolutePath() );
-                if(!inPath.getAbsolutePath().substring(inPath.getAbsolutePath().lastIndexOf(".")).equalsIgnoreCase("txt")){
+                String mPath = inPath.getAbsolutePath();
+                if(!mPath.substring(mPath.lastIndexOf(".")).equalsIgnoreCase(".txt")){
                     int rtn = Xtractor.start();
                     if ( rtn != 0 ) {
                         misc.log( "Error: extractor failure. " + rtn);
@@ -50,7 +51,7 @@ public class logic {
                     }
                     license = Xtractor.getLicense();
                 }else{
-                    license = Xtractor.readFile(inPath.getAbsolutePath());
+                    license = Xtractor.readFile(mPath);
                 }
 				preprocess pprocess = new preprocess( license );
 				Xtractor.clean();

@@ -17,16 +17,20 @@ import weka.core.converters.ArffSaver;
 import java.io.*;
 
 public class preprocess {
-	private String licens;
+	private String licens, structure="arffMap.arff";
 	private Instances instances;
 	
 	public preprocess( String text ) {
 		licens = text;
 	}
+    public preprocess( String text, String mStructure ) {
+		licens = text;
+        structure = mStructure;
+	}
 	
 	public int start() {
 		if ( licens.length() < 2 ){
-			misc.log( "Error: empty license. " );
+			misc.log( "Error: empty license. "+licens );
 			return 1;
 		}
 			
@@ -44,7 +48,7 @@ public class preprocess {
         Instances data = createInstance();
         if(doFilter(data)){
             arffMap mapper = new arffMap();
-            if(mapper.loadStructure() == 0){
+            if(mapper.loadStructure(structure) == 0){
                 if(mapper.map(instances) == 0){
                     try{
                         instances = mapper.getFinal();
