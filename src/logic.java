@@ -39,15 +39,20 @@ public class logic {
 				traverse( fileList[ count ] );
 			}
 		} else if ( inPath.isFile() ) {
-			if ( isFileOK( inPath ) ) {				
-				extractor Xtractor = new extractor( inPath.getAbsolutePath() );
-                int rtn = Xtractor.start();
-				if ( rtn != 0 ) {
-					misc.log( "Error: extractor failure. " + rtn);
-					System.exit( 1 );
-				}
-					
-				preprocess pprocess = new preprocess( Xtractor.getLicense() );
+			if ( isFileOK( inPath ) ) {
+                String license;
+                extractor Xtractor = new extractor( inPath.getAbsolutePath() );
+                if(!inPath.getAbsolutePath().substring(inPath.getAbsolutePath().lastIndexOf(".")).equalsIgnoreCase("txt")){
+                    int rtn = Xtractor.start();
+                    if ( rtn != 0 ) {
+                        misc.log( "Error: extractor failure. " + rtn);
+                        System.exit( 1 );
+                    }
+                    license = Xtractor.getLicense();
+                }else{
+                    license = Xtractor.readFile(inPath.getAbsolutePath());
+                }
+				preprocess pprocess = new preprocess( license );
 				Xtractor.clean();
                     
 				if ( pprocess.start() != 0 ) {

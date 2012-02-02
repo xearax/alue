@@ -150,7 +150,7 @@ public class extractor{
         return code;
     }
     
-    private String readFile(String mPath){
+    public String readFile(String mPath){
         String line="", str="";
         try{
             BufferedReader in = new BufferedReader(new FileReader(mPath));
