@@ -74,7 +74,7 @@ public class preprocess {
             StringToWordVector wordVec = new StringToWordVector();
             wordVec.setWordsToKeep(1000);
             wordVec.setDoNotOperateOnPerClassBasis(false);
-            wordVec.setIDFTransform(true);
+            wordVec.setIDFTransform(false);
             wordVec.setNormalizeDocLength(new SelectedTag(1,StringToWordVector.TAGS_FILTER));
             
             wordVec.setLowerCaseTokens(true);
@@ -83,7 +83,7 @@ public class preprocess {
             IteratedLovinsStemmer stemmer = new IteratedLovinsStemmer();
             wordVec.setStemmer(stemmer);
             wordVec.setUseStoplist(true);
-            wordVec.setTFTransform(true);
+            wordVec.setTFTransform(false);
             WordTokenizer tokenizer = new WordTokenizer();
             tokenizer.setDelimiters(tokenizer.getDelimiters().concat(theDelim));
             wordVec.setTokenizer(tokenizer);

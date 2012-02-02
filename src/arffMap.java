@@ -41,8 +41,10 @@ public class arffMap{
         for(i=0; i<defaultSet.numAttributes()-1; i++){
             for(j=0; j<data.numAttributes()-1; j++){
                 if(defaultSet.attribute(i).name().equalsIgnoreCase(data.attribute(j).name())){
+                    misc.log(defaultSet.attribute(i).name()+"="+data.attribute(j).name()+": "+data.firstInstance().value(j));
                     //misc.log(Double.toString(data.firstInstance().value(j)));
-                    f.setValue(i, data.firstInstance().value(j));
+                    f.setValue(defaultSet.attribute(i), data.firstInstance().value(j));
+                    //f.setValueSparse(i, data.firstInstance().value(j));
                 }
             }
         }
@@ -50,10 +52,9 @@ public class arffMap{
             misc.log(e.toString()+"; "+i+"("+defaultSet.numAttributes()+"), "+j+"("+data.numAttributes()+")");
             e.printStackTrace();
         }
-        SparseInstance g = new SparseInstance(f);
-        finalSet.add(g);
+        finalSet.add(f);
         
-        if(g.numValues()>0)        
+        if(f.numValues()>0)        
             return 0;
         else
             return 1;
