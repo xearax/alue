@@ -43,6 +43,17 @@ public class preprocess {
 	private boolean convert() {
         Instances data = createInstance();
         if(doFilter(data)){
+            arffMap mapper = new arffMap();
+            if(mapper.loadStructure() == 0){
+                if(mapper.map(instances) == 0){
+                    try{
+                        saveArff(mapper.getFinal(), "mapped.arff");
+                    }catch(Exception e){
+                        misc.log("MIsch");
+                    }
+                }
+            }
+                
             return true;
         }
         
@@ -61,7 +72,7 @@ public class preprocess {
             Filter[] filters = new Filter[2];
             
             StringToWordVector wordVec = new StringToWordVector();
-            wordVec.setWordsToKeep(3000);
+            wordVec.setWordsToKeep(1000);
             wordVec.setDoNotOperateOnPerClassBasis(false);
             wordVec.setIDFTransform(true);
             wordVec.setNormalizeDocLength(new SelectedTag(1,StringToWordVector.TAGS_FILTER));
@@ -110,11 +121,15 @@ public class preprocess {
 	}
     
     private int saveArff(Instances theCollection){
+        return saveArff(theCollection, "test.arff");
+    }
+    
+    private int saveArff(Instances theCollection, String fName){
 		try{
 			// Save data set as Strings
 			ArffSaver saver = new ArffSaver();
             saver.setInstances(theCollection);
-	        saver.setFile(new File("test.arff"));
+	        saver.setFile(new File(fName));
 	        saver.writeBatch();
 		}catch(Exception e){
 			System.err.println(e.toString());
@@ -137,7 +152,7 @@ public class preprocess {
         attInfo.addElement(classAttr);
         attInfo.addElement(contAttr);
         
-        Instances dataSet = new Instances("Testdata",attInfo,1);
+        Instances dataSet = new Instances("spyware",attInfo,1);
         dataSet.setClassIndex(0);
         
         //read the content and add the instance data
