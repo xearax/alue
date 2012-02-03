@@ -17,12 +17,9 @@ import weka.core.converters.ArffSaver;
 import java.io.*;
 
 public class preprocess {
-	private String licens, structure="arffMap.arff";
+	private String licens, structure;
 	private Instances instances;
 	
-	public preprocess( String text ) {
-		licens = text;
-	}
     public preprocess( String text, String mStructure ) {
 		licens = text;
         structure = mStructure;
@@ -47,8 +44,8 @@ public class preprocess {
 	private boolean convert() {
         Instances data = createInstance();
         if(doFilter(data)){
-            arffMap mapper = new arffMap();
-            if(mapper.loadStructure(structure) == 0){
+            arffMap mapper = new arffMap(structure);
+            if(mapper.loadStructure() == 0){
                 if(mapper.map(instances) == 0){
                     try{
                         instances = mapper.getFinal();
