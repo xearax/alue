@@ -13,16 +13,14 @@ public class arffMap{
     
     Instances defaultSet, finalSet;
      String structure = "arffMap.arff";
-    
-    public arffMap(){}
-    
+      
     public arffMap(String mStructure){
         structure = mStructure;
     }
 
     public int loadStructure(){
 		int errorCode = 1;
-        structure = mStructure;
+
 		try
         {
             FileReader reader = new FileReader(structure);
@@ -34,7 +32,7 @@ public class arffMap{
             errorCode = 0;
         } catch (Exception e)
         {
-            misc.log(e.toString());
+            misc.log( "Error: Load structure error: " + e.toString() );
         }
         
         return errorCode;
@@ -49,9 +47,7 @@ public class arffMap{
             boolean mFound = false;
             for(j=0; j<data.numAttributes()-1; j++){
                 if(defaultSet.attribute(i).name().equalsIgnoreCase(data.attribute(j).name())){
-                    //misc.log(defaultSet.attribute(i).name()+"="+data.attribute(j).name()+": "+data.firstInstance().value(j));
                     f.setValue(defaultSet.attribute(i), data.firstInstance().value(j));
-                    //f.setValueSparse(i, data.firstInstance().value(j));
                     mFound = true;
                 }
             }
