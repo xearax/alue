@@ -18,6 +18,10 @@ public class verdict {
 	}
 	
 	public String toString() {
-		return "Result: " + result + "("+sClass+") for '" + name + "'.";
+		return "[ "+ sClass +" ]: '" + name + "'.";
+	}
+	
+	public String getClassName () {
+		return sClass;
 	}
 }
