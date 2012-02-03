@@ -113,12 +113,12 @@ public class main {
 	
 	private static void printDisclaimer() {
 		System.out.println( "" );
-		System.out.println( "                                ----=[ DISCLAIMER ]=---" );		
-		System.out.println( "   All software available from this website is copyright protected © 2012 by A. Borg and   " );
-		System.out.println( "              M. Boldt at Blekinge Institute of Technology (BTH), Sweden.                  " );
+		System.out.println( "                                ----=[ DISCLAIMER ]=---" );
+		System.out.println( "      This software is copyright protected © 2012 by A. Borg and M. Boldt at Blekinge      " );
+		System.out.println( "                           Institute of Technology (BTH) in Sweden.                  " );
 		System.out.println( "                                                                                           " );
-		System.out.println( "    As well, all software is provided on an 'as is' basis without warranty of any kind,    " );
-		System.out.println( "                                 express or implied.                                       " );
+		System.out.println( "      This software is also provided on an 'as is' basis without warranty of any kind,     " );
+		System.out.println( "                                   express or implied.                                     " );
 		System.out.println( "                                                                                           " );
 		System.out.println( "   Under no circumstances and under no legal theory, whether in tort, contract, or other-  " );
 		System.out.println( "   wise, shall BTH, A. Borg, or M. Boldt be liable to you or to any other person for any   " );
